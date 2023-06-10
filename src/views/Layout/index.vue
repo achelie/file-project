@@ -22,4 +22,9 @@ import LayoutHeader from "./components/LayoutHeader.vue";
     background-color: #f0f0f0;
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
 }
+
+.el-main{
+    padding: 0;
+    padding-top: 15px;
+}
 </style>

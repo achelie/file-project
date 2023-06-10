@@ -1,12 +1,12 @@
 <script setup>
 import { onMounted, ref, watch } from 'vue'
 import { useAsideStore } from '@/stores/aside';
-
+import FileItem from './FileItem.vue';
 
 // 无限滚动获取数据
 const asideStore = useAsideStore()
 const disabled = ref(false)
-const fileList = ref([{id:1,name:'name'}])
+const fileList = ref([{id:1,name:'name'},{id:1,name:'name'}])
 const load = async () => {
     // asideStore.loadFile()
     // await asideStore.getFilesState()
@@ -40,13 +40,13 @@ watch(
 
 <template>
     <ul v-infinite-scroll="load" class="infinite-list" style="overflow: auto" :infinite-scroll-disabled="disabled">
-        <li v-for="i in fileList" :key="i.id" class="infinite-list-item">{{ i }}</li>
+        <FileItem v-for="i in fileList" :key="i.id" class="infinite-list-item">{{ i }}</FileItem>
     </ul>
 </template>
   
 
   
-<style scoped>
+<style  scoped>
 .infinite-list {
     height: calc(100vh-113px);
     padding: 0;
@@ -55,14 +55,14 @@ watch(
 }
 
 .infinite-list .infinite-list-item {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    
     height: 50px;
-    background: var(--el-color-primary-light-9);
-    margin: 10px;
+    background: #fff;
     color: var(--el-color-primary);
+
+    padding: 10px;
 }
+
 
 .infinite-list .infinite-list-item+.list-item {
     margin-top: 10px;
