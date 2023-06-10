@@ -2,10 +2,11 @@
 import { onMounted, ref, watch } from 'vue'
 import { useAsideStore } from '@/stores/aside';
 
+
 // 无限滚动获取数据
 const asideStore = useAsideStore()
 const disabled = ref(false)
-const fileList = ref([])
+const fileList = ref([{id:1,name:'name'}])
 const load = async () => {
     // asideStore.loadFile()
     // await asideStore.getFilesState()
@@ -45,9 +46,9 @@ watch(
   
 
   
-<style>
+<style scoped>
 .infinite-list {
-    height: 800px;
+    height: calc(100vh-113px);
     padding: 0;
     margin: 0;
     list-style: none;

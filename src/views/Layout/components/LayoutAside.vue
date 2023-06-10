@@ -8,6 +8,7 @@ import {
     Setting,
 } from '@element-plus/icons-vue'
 import { onMounted, ref } from "vue";
+
 // 控制左侧
 // const handleOpen = (key: string, keyPath: string[]) => {
 //     console.log(key, keyPath)
@@ -29,7 +30,7 @@ const getFiles =async(type)=>{
 <template>
     <el-col :span="12">
         <el-menu active-text-color="#ffd04b" background-color="#545c64" class="el-menu-vertical-demo" default-active="1"
-            text-color="#fff" @open="handleOpen" @close="handleClose" :style="{ width: '200px', height: '916px' }">
+            text-color="#fff" @open="handleOpen" @close="handleClose" :style="{ width: '200px', height: 'calc(100vh - 60px)' }">
             <el-menu-item index="1" @click="getFiles('public')">
                 <el-icon><icon-menu /></el-icon>
                 <span>主页</span>

@@ -102,13 +102,17 @@ const doLogin = ()=>{
           <a href="javascript:;">搜索推荐</a>
           <a href="javascript:;">友情链接</a>
         </p>
-        <p>CopyRight &copy; 小兔鲜儿</p>
       </div>
     </footer>
   </div>
 </template>
 
 <style scoped lang='scss'>
+.container {
+  width: 1240px;
+  margin: 0 auto;
+  position: relative;
+}
 .login-header {
   background: #fff;
   border-bottom: 1px solid #e4e4e4;
@@ -155,7 +159,7 @@ const doLogin = ()=>{
 
 .login-section {
   background: url('@/assets/images/login-bg.png') no-repeat center / cover;
-  height: 688px;
+  height: 75vh;
   position: relative;
 
   .wrapper {

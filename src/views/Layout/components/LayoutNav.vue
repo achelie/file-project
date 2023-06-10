@@ -40,7 +40,7 @@ const confirm = ()=>{
 <style scoped lang="scss">
 .app-topnav {
   background: #495057;
-  box-shadow: #666 5px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
   ul {
     display: flex;
     height: 53px;
