@@ -10,3 +10,14 @@ export function getUserAPI({username,password}){
         }
     })
 }
+
+export function getRegisterUserAPI({username,password}){
+    return request({
+        url:'/register',
+        method:'POST',
+        data:{
+            username,
+            password
+        }
+    })
+}

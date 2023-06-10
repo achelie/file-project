@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import { ElMessage } from 'element-plus'
 import 'element-plus/theme-chalk/el-message.css'
 import { useRouter } from 'vue-router';
-import {useUserStore} from '@/stores/user'
+import { useUserStore } from '@/stores/user'
 
 // 表单的校验
 const form = ref({
@@ -86,6 +86,10 @@ const doLogin = ()=>{
               </el-form-item>
               <el-button size="large" class="subBtn" @click="doLogin">点击登录</el-button>
             </el-form>
+            <div>
+              <RouterLink class="btn-register" to="/register">进入注册页面</RouterLink>
+            </div>
+            
           </div>
         </div>
       </div>
@@ -108,6 +112,15 @@ const doLogin = ()=>{
 </template>
 
 <style scoped lang='scss'>
+.btn-register{
+  width: 100px;
+    display: flex;
+    margin: 0 auto;
+
+    &:hover {
+        background-color: #fff;
+    }
+}
 .container {
   width: 1240px;
   margin: 0 auto;
