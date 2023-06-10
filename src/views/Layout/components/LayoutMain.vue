@@ -1,35 +1,33 @@
 <script setup>
 import { onMounted, ref, watch } from 'vue'
-import { useAsideStore } from '@/stores/aside';
+import { useFileStore } from '@/stores/file';
 import FileItem from './FileItem.vue';
 
 // 无限滚动获取数据
-const asideStore = useAsideStore()
+const fileStore = useFileStore()
 const disabled = ref(false)
-const fileList = ref([{id:1,name:'name'},{id:1,name:'name'}])
+const fileList = ref([{id:1,filename:'name',describle:'描述',upname:"user"},{id:1,filename:'name',describle:'描述',upname:"user"}])
 const load = async () => {
-    // asideStore.loadFile()
-    // await asideStore.getFilesState()
-    if (asideStore.fileData.length === 0) {
+    fileStore.loadFile()
+    await fileStore.getFilesState()
+    if (fileStore.fileData.length === 0) {
         disabled.value = true
-    } else {
-        fileList.value = [fileList.value, ...asideStore.fileData.value]
     }
 }
 
 // 第一次获取数据
 const getfileData = async () => {
-    await asideStore.getFilesState()
-    fileList.value = asideStore.fileData
+    await fileStore.getFilesState()
+    fileList.value = fileStore.fileData
 }
 onMounted(() => {
     getfileData()
 })
-
+// 监控file的数据变化
 watch(
-    () => asideStore.fileData,
+    () => fileStore.fileData,
     (newValue, oldValue) => {
-        fileList.value = asideStore.fileData
+        fileList.value = [fileList.value, ...fileStore.fileData]
     },
     { deep: true } // 开启深度监听
 );
@@ -40,7 +38,7 @@ watch(
 
 <template>
     <ul v-infinite-scroll="load" class="infinite-list" style="overflow: auto" :infinite-scroll-disabled="disabled">
-        <FileItem v-for="i in fileList" :key="i.id" class="infinite-list-item">{{ i }}</FileItem>
+        <FileItem v-for="i in fileList" :key="i.id" class="infinite-list-item" :file="i"></FileItem>
     </ul>
 </template>
   

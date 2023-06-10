@@ -1,8 +1,8 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
-import { getFilesAPI } from "@/apis/aside"
+import { getFilesAPI } from "@/apis/file"
 
-export const useAsideStore = defineStore('aside', () => {
+export const useFileStore = defineStore('aside', () => {
     const fileData = ref([])
     const fileType = ref("public")
     const page = ref(1)

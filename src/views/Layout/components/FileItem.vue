@@ -1,13 +1,14 @@
 <script setup>
 import { Download, Star, Edit, Delete } from '@element-plus/icons-vue';
+defineProps(['file'])
 </script>
 
 <template>
     <div class="container">
         <div class="include">
-            <div class="filename"><el-text class="w-300px" size="large" truncated>文件名</el-text></div>
-            <div class="filedesc"><el-text class="w-500px" size="small" truncated>文件描述</el-text></div>
-            <div class="fileuser"><el-text class="w-150px" truncated>上传者:</el-text></div>
+            <div class="filename"><el-text class="w-300px" size="large" truncated>{{file.filename}}</el-text></div>
+            <div class="filedesc"><el-text class="w-500px" size="small" truncated>{{file.describle}}</el-text></div>
+            <div class="fileuser"><el-text class="w-150px" truncated>上传者:{{ file.upname }}</el-text></div>
             <el-row>
                 <el-button :icon="Download" circle />
                 <el-button :icon="Star" circle />
@@ -27,6 +28,10 @@ import { Download, Star, Edit, Delete } from '@element-plus/icons-vue';
     width: 500px;
 }
 
+.w-150px{
+    width: 150px;
+}
+
 .container {
     .include {
         display: flex;
@@ -35,6 +40,9 @@ import { Download, Star, Edit, Delete } from '@element-plus/icons-vue';
         margin: 0 20px;
         border-bottom: 1px solid #f7f9fc;
         height: 40px;
+        .el-row{
+            height: 40px;
+        }
     }
 
     &:hover {
