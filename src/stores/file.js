@@ -6,6 +6,7 @@ export const useFileStore = defineStore('aside', () => {
     const fileData = ref([])
     const fileType = ref("public")
     const page = ref(1)
+    const isChangePage = ref(false)
     const getFilesState= async () => {
         const res = await getFilesAPI({idx:page.value,type:fileType.value})
         fileData.value = res
@@ -13,9 +14,13 @@ export const useFileStore = defineStore('aside', () => {
     const changeFile = (type)=>{
         page.value = 1
         fileType.value = type
+        isChangePage.value = true;
     }
-    const loadFile = ()=>{
-        page.value ++;
+    const changePage = (p)=>{
+        page.value = p
     }
-    return { fileData,changeFile,loadFile,getFilesState }
+    const falseIs = ()=>{
+        isChangePage.value = false;
+    }
+    return { fileData,changeFile,changePage,getFilesState,page,falseIs,isChangePage }
 })

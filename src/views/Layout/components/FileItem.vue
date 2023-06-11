@@ -28,17 +28,13 @@ const blurCounter = ref(0);
 
 const handleCounter = () => {
     blurCounter.value = 2;
-    console.log(blurCounter.value);
 }
 
 const handleBlur = () => {
     blurCounter.value=1;
     setTimeout(() => {
-        console.log(blurCounter.value);
         if (blurCounter.value === 1) {
             blurCounter.value = 0;
-            // 在这里触发你的函数
-            console.log("两个输入框都失去焦点了");
             fileShow.value = true;
         }
     }, 150);
