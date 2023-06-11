@@ -19,3 +19,15 @@ export function getDownloadAPI(fileName){
         }
     })
 }
+
+
+export function getUpdateAPI({filename,describle}){
+    return request({
+        url:'/fileupdate',
+        method:'POST',
+        data:{
+            filename,
+            describle
+        }
+    })
+}

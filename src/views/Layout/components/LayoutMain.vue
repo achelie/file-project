@@ -27,7 +27,11 @@ onMounted(() => {
 watch(
     () => fileStore.fileData,
     (newValue, oldValue) => {
-        fileList.value = [fileList.value, ...fileStore.fileData]
+        if(fileStore.page==1){
+            fileList.value=fileStore.fileData
+        }{
+            fileList.value = [fileList.value, ...fileStore.fileData]
+        }
     },
     { deep: true } // 开启深度监听
 );

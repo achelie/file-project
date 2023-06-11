@@ -29,8 +29,6 @@ const handleSearch = () => {
             :on-success="handleSuccess" :on-error="handleError" show-file-list="false" style="height: 32px;" >
             <el-button type="primary">上传<el-icon><UploadFilled /></el-icon></el-button>
         </el-upload>
-        <!-- <el-input v-model="searchText" placeholder="Search" prefix-icon="el-icon-search" clearable @clear="handleClear"
-                    @keydown.enter="handleSearch" style="width: 300px;" /> -->
         <el-input v-model="searchText" placeholder="搜索" :prefix-icon="Search" clearable @clear="handleClear"
             @keydown.enter="handleSearch" style="width: 300px;" class="search-input" />
     </div>
