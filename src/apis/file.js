@@ -9,3 +9,13 @@ export function getFilesAPI({idx,type}){
         }
     })
 }
+
+export function getDownloadAPI(fileName){
+    return request({
+        url:'/download',
+        method:'POST',
+        data:{
+            fileName
+        }
+    })
+}

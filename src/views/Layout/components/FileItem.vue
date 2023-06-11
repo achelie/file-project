@@ -1,6 +1,13 @@
 <script setup>
 import { Download, Star, Edit, Delete } from '@element-plus/icons-vue';
-defineProps(['file'])
+import {getDownloadAPI} from "@/apis/file"
+const props = defineProps(['file'])
+
+// 下载按钮设置
+const downloadFile = ()=>{
+    getDownloadAPI(props.file.filename)
+}
+
 </script>
 
 <template>
@@ -10,7 +17,7 @@ defineProps(['file'])
             <div class="filedesc"><el-text class="w-500px" size="small" truncated>{{file.describle}}</el-text></div>
             <div class="fileuser"><el-text class="w-150px" truncated>上传者:{{ file.upname }}</el-text></div>
             <el-row>
-                <el-button :icon="Download" circle />
+                <el-button @click="downloadFile" :icon="Download" circle />
                 <el-button :icon="Star" circle />
                 <el-button :icon="Edit" circle />
                 <el-button :icon="Delete" circle />
