@@ -50,6 +50,7 @@ watch(() => fileStore.page, async () => {
     <ul class="infinite-list" style="overflow: auto">
         <FileItem v-for="i in fileList" :key="i.id" class="infinite-list-item" :file="i"></FileItem>
     </ul>
+    <div class="noFile" v-if="fileList.length === 0">No files found.</div>
     <div class="pag">
         <div class="example-pagination-block">
             <el-pagination v-model:current-page="currentPage" layout="prev, pager, next" :total="totalLen" :page-size="20" />
@@ -60,7 +61,9 @@ watch(() => fileStore.page, async () => {
 
   
 <style  scoped>
-
+.noFile{
+    margin: 0 auto;
+}
 .layoutHeader{
     position: relative;
     background-color: #f0f0f0;
@@ -80,7 +83,6 @@ watch(() => fileStore.page, async () => {
     height: 50px;
     background: #fff;
     color: var(--el-color-primary);
-
     padding: 10px;
 }
 

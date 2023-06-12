@@ -21,10 +21,10 @@ const uploadFiles = () => {
     uploadRef.value.submit();
 };
 // 关闭对话框时的操作
-const closeDialog = ()=>{
+const closeDialog = async()=>{
     dialogVisible.value = false
     uploadRef.value.clearFiles()
-    fileStore.getFilesState();
+    await fileStore.getFilesState();
 }
 
 // 搜索控制

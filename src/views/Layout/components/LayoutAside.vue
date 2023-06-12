@@ -36,8 +36,8 @@ const getFiles =async(type)=>{
                     </el-icon>
                     <span>个人</span>
                 </template>
-                <el-menu-item index="1-1" @click="getFiles('private')">上传</el-menu-item>
-                <el-menu-item index="1-2" @click="getFiles('private')">收藏</el-menu-item>
+                <el-menu-item index="1-1" @click="getFiles('private')">我的上传</el-menu-item>
+                <el-menu-item index="1-2" @click="getFiles('privatecollect')">我的收藏</el-menu-item>
             </el-sub-menu>
             <el-menu-item index="3" @click="$router.push('/chat')">
                 <el-icon><ChatDotRound /></el-icon>

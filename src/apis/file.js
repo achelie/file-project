@@ -42,3 +42,14 @@ export function getSearchAPI({searchValue,type,idx}) {
         }
     })
 }
+
+export function getCollectAPI({filename,collect}) {
+    return request({
+        url: '/collection',
+        method: 'POST',
+        data: {
+            filename,
+            collect
+        }
+    })
+}

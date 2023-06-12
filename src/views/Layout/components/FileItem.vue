@@ -1,13 +1,11 @@
 <script setup>
-import { Download, Star, Edit, Delete } from '@element-plus/icons-vue';
-import { getUpdateAPI, getDeleteAPI } from "@/apis/file"
-import { ref, watch, nextTick } from "vue"
+import { Download, Star, Edit, Delete, StarFilled,Document,Picture,Headset ,VideoPlay,Collection } from '@element-plus/icons-vue';
+import { getUpdateAPI, getDeleteAPI,getCollectAPI } from "@/apis/file"
+import { ref, watch, nextTick, onMounted } from "vue"
 import { useFileStore } from "@/stores/file"
 const fileStore = useFileStore()
 const props = defineProps(['file'])
 // 修改按钮设置
-const preFileDesc = ref('')
-const preFileTitle = ref('')
 const fileShow = ref(true)
 const fileTitle = ref('')
 const fileDescribe = ref('')
@@ -61,17 +59,39 @@ const deleteFile = async () => {
     }, 200)
 
 }
+// 修改收藏
+const isCollect = ref(props.file.shouchang)
+const changeCollect = async()=>{
+    getCollectAPI({filename:fileTitle.value,collect:isCollect.value})
+    setTimeout(async () => {
+        isCollect.value = !isCollect.value;
+        await fileStore.getFilesState()
+    }, 100)
+    
+}
+// 文件类型展示
+const fileType = ref(props.file.filetype)
+const handleFileIcon = ()=>{
+
+}
 
 </script>
 
 <template>
     <div class="container">
         <div class="include">
-            <div class="filename" v-if="fileShow"><el-text class="w-300px" size="large" truncated>{{ fileTitle }}</el-text>
+            
+            <div class="filename" v-if="fileShow"><el-text class="w-300px" size="large" truncated>
+                <el-icon v-if="fileType === 'document'"><Document /></el-icon>
+                <el-icon v-else-if="fileType === 'image'"><Picture /></el-icon>
+                <el-icon v-else-if="fileType === 'audio'"><Headset  /></el-icon>
+                <el-icon v-else-if="fileType === 'video'"><VideoPlay /></el-icon>
+                <el-icon v-else-if="fileType === 'other'"><Collection /></el-icon>
+                &ensp;{{ fileTitle }}</el-text>
             </div>
             <div class="filename" v-if="!fileShow"><el-input class="w-300px" v-model="fileTitle" @blur="handleBlur"
                     @click="handleCounter" ref="titleInputRef"></el-input></div>
-            <div class="filedesc" v-if="fileShow"><el-text class="w-500px" size="small" truncated>{{ fileDescribe
+            <div class="filedesc" v-if="fileShow"><el-text class="w-500px" size="small" truncated>文件描述:{{ fileDescribe
             }}</el-text>
             </div>
             <div class="filedesc" v-if="!fileShow"><el-input class="w-500px" v-model="fileDescribe" @blur="handleBlur"
@@ -80,7 +100,8 @@ const deleteFile = async () => {
             <el-row>
                 <a :href="`http://192.168.1.151:8686/download?fileName=${file.filename}`"><el-button :icon="Download"
                         circle></el-button></a>
-                <el-button :icon="Star" circle />
+                <el-button v-if="!isCollect" @click="changeCollect" :icon="Star" circle />
+                <el-button v-if="isCollect" @click="changeCollect" :icon="StarFilled" circle />
                 <el-button @click="updateFile" :icon="Edit" circle />
                 <el-button @click="deleteFile" :icon="Delete" circle />
             </el-row>
