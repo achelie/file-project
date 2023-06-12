@@ -1,9 +1,9 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
-import { getFilesAPI } from "@/apis/file"
+import { getFilesAPI,getSearchAPI } from "@/apis/file"
 
 export const useFileStore = defineStore('aside', () => {
-    const fileData = ref([])
+    const fileData = ref({})
     const fileType = ref("public")
     const page = ref(1)
     const isChangePage = ref(false)
@@ -16,11 +16,17 @@ export const useFileStore = defineStore('aside', () => {
         fileType.value = type
         isChangePage.value = true;
     }
+    const searchFile = async(searchValue)=>{
+        page.value = 1
+        isChangePage.value = true;
+        const res = await getSearchAPI({searchValue,type:fileType.value,idx:page.value})
+        fileData.value = res
+    }
     const changePage = (p)=>{
         page.value = p
     }
     const falseIs = ()=>{
         isChangePage.value = false;
     }
-    return { fileData,changeFile,changePage,getFilesState,page,falseIs,isChangePage }
+    return { fileData,changeFile,changePage,getFilesState,page,falseIs,isChangePage,searchFile }
 })

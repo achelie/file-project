@@ -3,6 +3,7 @@ import Layout from "@/views/Layout/index.vue"
 import LayoutMain from "@/views/Layout/components/LayoutMain.vue"
 import Login from "@/views/Login/index.vue"
 import Register from "@/views/Register/index.vue"
+import Chat from "@/views/Chat/index.vue"
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,6 +16,10 @@ const router = createRouter({
           path:'/',
           component:LayoutMain,
         },
+        {
+          path:'/chat',
+          component:Chat
+        }
       ]
     },
     {

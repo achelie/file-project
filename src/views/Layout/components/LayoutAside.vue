@@ -1,18 +1,23 @@
 <script setup>
 import { useFileStore } from "@/stores/file.js"
+import { useRouter } from "vue-router";
 // 导入图标
 import {
     Menu as IconMenu,
     Location,
     Setting,
+    ChatDotRound
 } from '@element-plus/icons-vue'
 
 // 改变获取类型
+const router = useRouter()
 const fileStore = useFileStore()
 const getFiles =async(type)=>{
+    router.push('/')
     fileStore.changeFile(type)
     await fileStore.getFilesState()
 }
+// 设置路由跳转
 
 
 </script>
@@ -32,9 +37,13 @@ const getFiles =async(type)=>{
                     <span>个人</span>
                 </template>
                 <el-menu-item index="1-1" @click="getFiles('private')">上传</el-menu-item>
-                <el-menu-item index="1-2" @click="getFiles('private')">下载</el-menu-item>
+                <el-menu-item index="1-2" @click="getFiles('private')">收藏</el-menu-item>
             </el-sub-menu>
-            <el-menu-item index="3">
+            <el-menu-item index="3" @click="$router.push('/chat')">
+                <el-icon><ChatDotRound /></el-icon>
+                <span>聊天</span>
+            </el-menu-item>
+            <el-menu-item index="4">
                 <el-icon>
                     <setting />
                 </el-icon>

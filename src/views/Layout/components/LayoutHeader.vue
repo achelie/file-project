@@ -4,14 +4,14 @@ import 'element-plus/theme-chalk/el-message.css'
 import { ref } from "vue"
 import { Search, UploadFilled } from '@element-plus/icons-vue'
 import { useUserStore } from '@/stores/user'
+import { useFileStore } from '@/stores/file'
 // 上传控制
+const fileStore = useFileStore()
 const userStore = useUserStore()
 const dialogVisible = ref(false)
 const confirmDialog = ()=>{
-    dialogVisible.value =false
     uploadFiles();
     describle.value =''
-    
 }
 const describle = ref('')
 const uploadData = ref({describle,upname:userStore.userState.username})
@@ -19,9 +19,13 @@ const uploadData = ref({describle,upname:userStore.userState.username})
 const uploadRef = ref(null);
 const uploadFiles = () => {
     uploadRef.value.submit();
-    uploadRef.value.clearFiles()
-    ElMessage.success("上传成功")
 };
+// 关闭对话框时的操作
+const closeDialog = ()=>{
+    dialogVisible.value = false
+    uploadRef.value.clearFiles()
+    fileStore.getFilesState();
+}
 
 // 搜索控制
 const searchText = ref('');
@@ -30,8 +34,9 @@ const handleClear = () => {
     searchText.value = '';
 };
 
-const handleSearch = () => {
-    console.log('Search for:', searchText.value);
+const handleSearch = async() => {
+    fileStore.searchFile(searchText.value)
+    handleClear()
 };
 
 </script>
@@ -41,18 +46,19 @@ const handleSearch = () => {
         <el-button type="primary" @click="dialogVisible = true">上传<el-icon>
                 <UploadFilled />
             </el-icon></el-button>
-        <el-dialog v-model="dialogVisible" title="上传" width="30%" :before-close="handleClose">
+        <el-dialog v-model="dialogVisible" title="上传" width="30%" :before-close="closeDialog">
             <el-text>文件描述</el-text>
             <el-input v-model="describle"></el-input>
-            <el-upload class="upload-demo" ref="uploadRef" drag action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d1" :data="uploadData"
-                multiple :auto-upload="false" @success="handleUploadSuccess" @error="handleUploadError">
+            <el-upload class="upload-demo" ref="uploadRef" drag action="http://192.168.1.151:8686/upload" :data="uploadData"
+                multiple :auto-upload="false" @success="ElMessage.success('上传成功')" @error="ElMessage.error('上传失败')" :directory="true">
                 <el-icon class="el-icon--upload"><upload-filled /></el-icon>
                 <div class="el-upload__text">
                     拖拽文件或者<em>点击上传</em>
                 </div>
             </el-upload>
             <div class="footer">
-                <el-button type="primary" @click="confirmDialog">确认</el-button>
+                <el-button type="primary" @click="confirmDialog">上传</el-button>
+                <el-button @click="closeDialog">取消</el-button>
             </div>
         </el-dialog>
         <el-input v-model="searchText" placeholder="搜索" :prefix-icon="Search" clearable @clear="handleClear"

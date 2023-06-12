@@ -1,13 +1,13 @@
 <script setup>
 import { Download, Star, Edit, Delete } from '@element-plus/icons-vue';
-import { getDownloadAPI, getUpdateAPI } from "@/apis/file"
+import { getUpdateAPI, getDeleteAPI } from "@/apis/file"
 import { ref, watch, nextTick } from "vue"
+import { useFileStore } from "@/stores/file"
+const fileStore = useFileStore()
 const props = defineProps(['file'])
-// 下载按钮设置
-const downloadFile = () => {
-    getDownloadAPI(props.file.filename)
-}
 // 修改按钮设置
+const preFileDesc = ref('')
+const preFileTitle = ref('')
 const fileShow = ref(true)
 const fileTitle = ref('')
 const fileDescribe = ref('')
@@ -16,11 +16,19 @@ const descInputRef = ref(null)
 fileTitle.value = props.file.filename
 fileDescribe.value = props.file.describle
 const updateFile = () => {
-    fileShow.value = false;
-    nextTick(() => {
+    
+    const response = getUpdateAPI({ filename: fileTitle.value, describle: fileDescribe.value })
+    response.then((res)=>{
+        if(res.msg){
+            fileShow.value = false;
+        nextTick(() => {
         titleInputRef.value.focus()
-    });
-    // getUpdateAPI({filename:fileTitle.value,describle:fileDescribe.value})
+        })}
+        else{
+            fileShow.value=true;
+        }
+    })
+    
 }
 
 // 控制双输入框的失去焦点
@@ -31,19 +39,28 @@ const handleCounter = () => {
 }
 
 const handleBlur = () => {
-    blurCounter.value=1;
+    blurCounter.value = 1;
     setTimeout(() => {
         if (blurCounter.value === 1) {
             blurCounter.value = 0;
             fileShow.value = true;
+            getUpdateAPI({ filename: fileTitle.value, describle: fileDescribe.value })
         }
-    }, 150);
+    }, 300);
 };
 
 // 当 fileShow 值改变时，重置 blurCounter
 watch(fileShow, () => {
     blurCounter.value = 0;
 });
+// 删除按钮
+const deleteFile = async () => {
+    getDeleteAPI(fileTitle.value)
+    setTimeout(async () => {
+        await fileStore.getFilesState()
+    }, 200)
+
+}
 
 </script>
 
@@ -54,22 +71,33 @@ watch(fileShow, () => {
             </div>
             <div class="filename" v-if="!fileShow"><el-input class="w-300px" v-model="fileTitle" @blur="handleBlur"
                     @click="handleCounter" ref="titleInputRef"></el-input></div>
-            <div class="filedesc" v-if="fileShow"><el-text class="w-500px" size="small" truncated>{{ fileDescribe }}</el-text>
+            <div class="filedesc" v-if="fileShow"><el-text class="w-500px" size="small" truncated>{{ fileDescribe
+            }}</el-text>
             </div>
             <div class="filedesc" v-if="!fileShow"><el-input class="w-500px" v-model="fileDescribe" @blur="handleBlur"
                     @click="handleCounter" ref="descInputRef"></el-input></div>
             <div class="fileuser"><el-text class="w-150px" truncated>上传者:{{ file.upname }}</el-text></div>
             <el-row>
-                <el-button @click="downloadFile" :icon="Download" circle />
+                <a :href="`http://192.168.1.151:8686/download?fileName=${file.filename}`"><el-button :icon="Download"
+                        circle></el-button></a>
                 <el-button :icon="Star" circle />
                 <el-button @click="updateFile" :icon="Edit" circle />
-                <el-button :icon="Delete" circle />
+                <el-button @click="deleteFile" :icon="Delete" circle />
             </el-row>
         </div>
     </div>
 </template>
 
 <style lang="scss" scoped>
+.el-row {
+    a {
+        display: box;
+        height: 32px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+}
+
 .w-300px {
     width: 300px;
 }
@@ -108,4 +136,5 @@ watch(fileShow, () => {
 
 .el-row {
     opacity: 0;
-}</style>
+}
+</style>

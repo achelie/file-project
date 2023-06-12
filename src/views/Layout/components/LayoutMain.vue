@@ -2,47 +2,18 @@
 import { onMounted, ref, watch } from 'vue'
 import { useFileStore } from '@/stores/file';
 import FileItem from './FileItem.vue';
+import LayoutHeader from "./LayoutHeader.vue";
 
-// 无限滚动获取数据
+// 文件数据
 const fileStore = useFileStore()
-const fileList = ref([
-    { id: 1, filename: 'name', describle: '描述', upname: "user" },
-    { id: 1, filename: 'name', describle: '描述', upname: "user" },
-    { id: 1, filename: 'name', describle: '描述', upname: "user" },
-    { id: 1, filename: 'name', describle: '描述', upname: "user" },
-    { id: 1, filename: 'name', describle: '描述', upname: "user" },
-    { id: 1, filename: 'name', describle: '描述', upname: "user" },
-    { id: 1, filename: 'name', describle: '描述', upname: "user" },
-    { id: 1, filename: 'name', describle: '描述', upname: "user" },
-    { id: 1, filename: 'name', describle: '描述', upname: "user" },
-    { id: 1, filename: 'name', describle: '描述', upname: "user" },
-    { id: 1, filename: 'name', describle: '描述', upname: "user" },
-    { id: 1, filename: 'name', describle: '描述', upname: "user" },
-    { id: 1, filename: 'name', describle: '描述', upname: "user" },
-    { id: 1, filename: 'name', describle: '描述', upname: "user" },
-    { id: 1, filename: 'name', describle: '描述', upname: "user" },
-    { id: 1, filename: 'name', describle: '描述', upname: "user" },
-    { id: 1, filename: 'name', describle: '描述', upname: "user" },
-    { id: 1, filename: 'name', describle: '描述', upname: "user" },
-    { id: 1, filename: 'name', describle: '描述', upname: "user" },
-    { id: 1, filename: 'name', describle: '描述', upname: "user" },
-    { id: 1, filename: 'name', describle: '描述', upname: "user" },
-    { id: 1, filename: 'name', describle: '描述', upname: "user" },
-    { id: 1, filename: 'name', describle: '描述', upname: "user" },
-    { id: 1, filename: 'name', describle: '描述', upname: "user" },
-    { id: 1, filename: 'name', describle: '描述', upname: "user" },
-    { id: 1, filename: 'name', describle: '描述', upname: "user" },
-    { id: 1, filename: 'name', describle: '描述', upname: "user" },
-    { id: 1, filename: 'name', describle: '描述', upname: "user" },
-    { id: 1, filename: 'name', describle: '描述', upname: "user" },
-    { id: 1, filename: 'name', describle: '描述', upname: "user" },
-    { id: 1, filename: 'name', describle: '描述', upname: "user" },
-])
+const fileList = ref([])
+const totalLen = ref(0)
 
-// 第一次获取数据
+// 获取文件数据
 const getfileData = async () => {
     await fileStore.getFilesState()
-    fileList.value = fileStore.fileData
+    fileList.value = fileStore.fileData.data
+    totalLen.value = fileStore.fileData.len
 }
 onMounted(() => {
     getfileData()
@@ -51,11 +22,7 @@ onMounted(() => {
 watch(
     () => fileStore.fileData,
     (newValue, oldValue) => {
-        if (fileStore.page == 1) {
-            fileList.value = fileStore.fileData
-        } {
-            fileList.value = [fileList.value, ...fileStore.fileData]
-        }
+        fileList.value = fileStore.fileData.data
     },
     { deep: true } // 开启深度监听
 );
@@ -70,7 +37,6 @@ watch(currentPage, async () => {
 })
 
 watch(() => fileStore.page, async () => {
-    console.log(1);
     currentPage.value = fileStore.page
 }, { deep: true })
 
@@ -78,12 +44,15 @@ watch(() => fileStore.page, async () => {
 </script>
 
 <template>
+    <div class="layoutHeader">
+        <LayoutHeader></LayoutHeader>
+    </div>
     <ul class="infinite-list" style="overflow: auto">
         <FileItem v-for="i in fileList" :key="i.id" class="infinite-list-item" :file="i"></FileItem>
     </ul>
     <div class="pag">
         <div class="example-pagination-block">
-            <el-pagination v-model:current-page="currentPage" layout="prev, pager, next" :total="1000" />
+            <el-pagination v-model:current-page="currentPage" layout="prev, pager, next" :total="totalLen" :page-size="20" />
         </div>
     </div>
 </template>
@@ -91,6 +60,14 @@ watch(() => fileStore.page, async () => {
 
   
 <style  scoped>
+
+.layoutHeader{
+    position: relative;
+    background-color: #f0f0f0;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+    padding: 0 30px;
+    margin-bottom: 10px;
+}
 .infinite-list {
     height: calc(100vh-113px);
     padding: 0;

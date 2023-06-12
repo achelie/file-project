@@ -1,33 +1,44 @@
 import request from "@/utils/http"
 
-export function getFilesAPI({idx,type}){
+export function getFilesAPI({ idx, type }) {
     return request({
-        url:'/filedisplay',
-        params:{
+        url: '/filedisplay',
+        params: {
             idx,
             type
         }
     })
 }
 
-export function getDownloadAPI(fileName){
+export function getUpdateAPI({ filename, describle }) {
     return request({
-        url:'/download',
-        method:'POST',
-        data:{
-            fileName
+        url: "/fileupdate",
+        method: "POST",
+        data: {
+            filename,
+            describle,
+        },
+    })
+}
+
+export function getDeleteAPI(fileName) {
+    return request({
+        url: '/filedel',
+        method: 'POST',
+        data: {
+            fileName,
         }
     })
 }
 
-
-export function getUpdateAPI({filename,describle}){
+export function getSearchAPI({searchValue,type,idx}) {
     return request({
-        url:'/fileupdate',
-        method:'POST',
-        data:{
-            filename,
-            describle
+        url: '/filesearch',
+        method: 'POST',
+        params: {
+            searchValue,
+            type,
+            idx
         }
     })
 }
