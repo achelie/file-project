@@ -4,6 +4,7 @@ import LayoutMain from "@/views/Layout/components/LayoutMain.vue"
 import Login from "@/views/Login/index.vue"
 import Register from "@/views/Register/index.vue"
 import Chat from "@/views/Chat/index.vue"
+import Person from "@/views/Person/index.vue"
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -19,6 +20,9 @@ const router = createRouter({
         {
           path:'/chat',
           component:Chat
+        },{
+          path:'/person',
+          component:Person
         }
       ]
     },

@@ -172,6 +172,7 @@ const doRegister = () => {
 }
 
 .login-section {
+    min-height: 500px;
     background: url('@/assets/images/login-bg.png') no-repeat center / cover;
     height: 75vh;
     position: relative;

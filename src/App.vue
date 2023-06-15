@@ -2,8 +2,11 @@
 </script>
 
 <template>
-    <RouterView></RouterView>
+    <div class="app">
+        <RouterView></RouterView>
+    </div>
 </template>
 
 <style >
+
 </style>

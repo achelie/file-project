@@ -64,9 +64,10 @@ const isCollect = ref(props.file.shouchang)
 const changeCollect = async()=>{
     getCollectAPI({filename:fileTitle.value,collect:isCollect.value})
     setTimeout(async () => {
-        isCollect.value = !isCollect.value;
         await fileStore.getFilesState()
-    }, 100)
+        console.log(props.file.shouchang);
+        isCollect.value = props.file.shouchang;
+    }, 150)
     
 }
 // 文件类型展示
@@ -78,9 +79,8 @@ const handleFileIcon = ()=>{
 </script>
 
 <template>
-    <div class="container">
+    <div class="itemcontainer">
         <div class="include">
-            
             <div class="filename" v-if="fileShow"><el-text class="w-300px" size="large" truncated>
                 <el-icon v-if="fileType === 'document'"><Document /></el-icon>
                 <el-icon v-else-if="fileType === 'image'"><Picture /></el-icon>
@@ -111,6 +111,7 @@ const handleFileIcon = ()=>{
 
 <style lang="scss" scoped>
 .el-row {
+    min-width: 165px;
     a {
         display: box;
         height: 32px;
@@ -120,18 +121,18 @@ const handleFileIcon = ()=>{
 }
 
 .w-300px {
-    width: 300px;
+    width: 15vw;
 }
 
 .w-500px {
-    width: 500px;
+    width: 25vw;
 }
 
 .w-150px {
-    width: 150px;
+    width: 10vw;
 }
 
-.container {
+.itemcontainer {
     .include {
         display: flex;
         align-items: center;

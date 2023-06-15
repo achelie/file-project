@@ -24,7 +24,7 @@ const getFiles =async(type)=>{
 <template>
     <el-col :span="12">
         <el-menu active-text-color="#ffd04b" background-color="#545c64" class="el-menu-vertical-demo" default-active="1"
-            text-color="#fff" :style="{ width: '200px', height: 'calc(100vh - 60px)' }">
+            text-color="#fff" >
             <el-menu-item index="1" @click="getFiles('public')">
                 <el-icon><icon-menu /></el-icon>
                 <span>主页</span>
@@ -43,7 +43,7 @@ const getFiles =async(type)=>{
                 <el-icon><ChatDotRound /></el-icon>
                 <span>聊天</span>
             </el-menu-item>
-            <el-menu-item index="4">
+            <el-menu-item index="4" @click="$router.push('/person')">
                 <el-icon>
                     <setting />
                 </el-icon>
@@ -53,3 +53,16 @@ const getFiles =async(type)=>{
     </el-col>
 </template>
   
+<style scoped>
+
+@media (max-height: 400px) {
+  .el-menu-vertical-demo {
+    height: 400px;
+  }
+}
+.el-menu-vertical-demo{
+    min-height: 400px;
+    width: 200px;
+    height: calc(100vh - 60px);
+}
+</style>

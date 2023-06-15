@@ -1,20 +1,44 @@
 <script setup>
-import useChat from './composable/useChat';
-const { messages, newMessage, currentUser, sendMessage } = useChat();
+import { ref,watch } from 'vue';
+import useWebSocket from './composable/useChat.js';
+
+const newMessage = ref('');
+const { message, error, send, close } = useWebSocket('ws://chat.server.url/');
+
+const sendMessage = () => {
+  if (newMessage.value) {
+    send({
+      user: 'currentUser',  // 发送用户名
+      text: newMessage.value,
+    });
+    newMessage.value = '';
+  }
+};
+
+watch(message, (msg) => {
+  // 直接更新模板显示新消息
+  addMessageToTemplate(msg); 
+});
+
+watch(error, (value) => {
+  if (value) {
+    close();
+  }
+});
 </script>
 
 <template>
-  <!-- 聊天室模板，根据您的需求进行调整 -->
-  <div>
-    <div v-for="(message, index) in messages" :key="index">
-      <div :class="message.user === currentUser ? 'my-message' : 'other-message'">
-        {{ message.text }}
-      </div>
+  <!-- 显示所有用户的消息,带有用户名 -->
+  <div v-for="message in messages">
+    <div :class="message.user === 'currentUser' ? 'my-message' : 'other-message'">
+      {{ message.user }}: {{ message.text }}
     </div>
-    <input type="text" v-model="newMessage" @keyup.enter="sendMessage" />
-    <button @click="sendMessage">Send</button>
   </div>
+  <input type="text" v-model="newMessage" @keyup.enter="sendMessage" />
+  <button @click="sendMessage">Send</button>
 </template>
+
+
 <style scoped>
 .chat-container {
   display: flex;

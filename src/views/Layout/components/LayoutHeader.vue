@@ -68,6 +68,7 @@ const handleSearch = async() => {
 
 <style lang="scss" scoped>
 .footer{
+    
     display: flex;
     justify-content: flex-end;
 }

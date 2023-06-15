@@ -1,11 +1,12 @@
 import request from "@/utils/http"
 
-export function getFilesAPI({ idx, type }) {
+export function getFilesAPI({ idx, type ,category }) {
     return request({
         url: '/filedisplay',
         params: {
             idx,
-            type
+            type,
+            category
         }
     })
 }
@@ -31,14 +32,15 @@ export function getDeleteAPI(fileName) {
     })
 }
 
-export function getSearchAPI({searchValue,type,idx}) {
+export function getSearchAPI({searchValue,type,idx,category}) {
     return request({
         url: '/filesearch',
         method: 'POST',
         params: {
             searchValue,
             type,
-            idx
+            idx,
+            category
         }
     })
 }

@@ -1,43 +1,50 @@
 import { ref, onMounted, onUnmounted } from 'vue';
-import { io } from 'socket.io-client';
-import {useUserStore} from "@/stores/user"
-export default function useChat() {
-  const userStore = useUserStore()
-  const messages = ref([]);
-  const newMessage = ref('');
-  const currentUser = ref(userStore.userState.username);
+import { ElMessage } from 'element-plus'
+import 'element-plus/theme-chalk/el-message.css'
 
-  let socket;
+export default function useWebSocket(url) {
+    const ws = ref(null);
+    const message = ref(null);
+    const error = ref(null);
+    const connected = ref(false);
 
-  onMounted(() => {
-    socket = io(`ws://192.168.1151:8686/socket/${userStore.userState.username}`); // 替换为您的Socket.io服务器URL
-
-    socket.on('message', (message) => {
-      messages.value.push(message);
+    const connect = () => {
+        ws.value = new WebSocket(url);
+        ws.value.onopen = () => {
+            connected.value = true;
+        };
+        ws.value.onmessage = (event) => {
+            message.value = JSON.parse(event.data);
+        };
+        ws.value.onerror = () => {
+            error.value = true;
+            connected.value = false;
+        };
+        ws.value.onclose = ws.value.onclose = () => {
+            connected.value = false;
+        };
+    };
+    const send = (data) => {
+        if (ws.value.readyState === ws.value.OPEN) {
+            ws.value.send(JSON.stringify(data));
+        } else {
+            // 提示用户重连
+        }
+    };
+    const close = () => {
+        ws.value.close();
+    };
+    onMounted(() => {
+        connect();
     });
-  });
-
-  onUnmounted(() => {
-    if (socket) {
-      socket.disconnect();
-    }
-  });
-
-  function sendMessage() {
-    if (newMessage.value.trim() !== '') {
-      const message = { user: currentUser.value, text: newMessage.value.trim() };
-      messages.value.push(message);
-
-      socket.emit('message', message);
-
-      newMessage.value = '';
-    }
-  }
-
-  return {
-    messages,
-    newMessage,
-    currentUser,
-    sendMessage,
-  };
+    onUnmounted(() => {
+        close();
+    });
+    return {
+        message,
+        error,
+        send,
+        close,
+        connected
+    };
 }
