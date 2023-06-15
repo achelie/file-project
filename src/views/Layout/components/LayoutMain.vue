@@ -36,7 +36,7 @@ watch(currentPage, async () => {
     if (!fileStore.isChangePage) {
         fileStore.changePage(currentPage.value)
         await fileStore.getFilesState()
-        infiniteList.value.scrollTo({ top: 0, behavior: 'smooth' })
+        infiniteList.value.scrollTop=0
     }
     fileStore.falseIs()
 })
@@ -49,8 +49,6 @@ const changeCategory = async(type)=>{
     fileStore.changeCategory(type)
     await fileStore.getFilesState()
 }
-
-
 </script>
 
 <template>
