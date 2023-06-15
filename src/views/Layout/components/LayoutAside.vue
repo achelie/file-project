@@ -1,7 +1,7 @@
 <script setup>
+import { ref, onMounted } from 'vue';
 import { useFileStore } from "@/stores/file.js"
 import { useRouter } from "vue-router";
-// 导入图标
 import {
     Menu as IconMenu,
     Location,
@@ -9,21 +9,36 @@ import {
     ChatDotRound
 } from '@element-plus/icons-vue'
 
-// 改变获取类型
 const router = useRouter()
 const fileStore = useFileStore()
-const getFiles =async(type)=>{
+const getFiles = async (type) => {
     router.push('/')
     fileStore.changeFile(type)
     await fileStore.getFilesState()
 }
-// 设置路由跳转
+// 控制路由当前路径时的侧边栏
+const activeIndex = ref('1');
 
+onMounted(() => {
+    switch (router.currentRoute.value.path) {
+        case '/':
+            activeIndex.value = '1';
+            break;
+        case '/chat':
+            activeIndex.value = '3';
+            break;
+        case '/person':
+            activeIndex.value = '4';
+            break;
+        default:
+            activeIndex.value = '1';
+    }
+});
 
 </script>
 <template>
     <el-col :span="12">
-        <el-menu active-text-color="#ffd04b" background-color="#545c64" class="el-menu-vertical-demo" default-active="1"
+        <el-menu :default-active="activeIndex" active-text-color="#ffd04b" background-color="#545c64" class="el-menu-vertical-demo"
             text-color="#fff" >
             <el-menu-item index="1" @click="getFiles('public')">
                 <el-icon><icon-menu /></el-icon>
