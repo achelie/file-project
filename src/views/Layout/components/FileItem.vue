@@ -53,21 +53,15 @@ watch(fileShow, () => {
 });
 // 删除按钮
 const deleteFile = async () => {
-    getDeleteAPI(fileTitle.value)
-    setTimeout(async () => {
-        await fileStore.getFilesState()
-    }, 200)
-
+    await getDeleteAPI(fileTitle.value)
+    await fileStore.getFilesState()
 }
 // 修改收藏
 const isCollect = ref(props.file.shouchang)
 const changeCollect = async()=>{
-    getCollectAPI({filename:fileTitle.value,collect:isCollect.value})
-    setTimeout(async () => {
-        await fileStore.getFilesState()
-        console.log(props.file.shouchang);
-        isCollect.value = props.file.shouchang;
-    }, 150)
+    await getCollectAPI({filename:fileTitle.value,collect:isCollect.value})
+    await fileStore.getFilesState()
+    isCollect.value = props.file.shouchang;
     
 }
 // 文件类型展示
