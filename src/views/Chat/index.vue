@@ -1,11 +1,16 @@
 <script setup>
 import useWebSocket from './composable/useWebSocket';
+import { ElMessage } from 'element-plus';
 import {useUserStore} from "@/stores/user"
 import { ref } from 'vue';
 const userStore = useUserStore()
 const { messages, isConnected, send } = useWebSocket('ws://192.168.1.151:8686/socket/'+userStore.userState.username);
 const msg = ref('')
 const sendmsg = ()=>{
+  if (msg.value.trim() === '') {
+    ElMessage.error('输入内容不能为空');
+    return;
+  }
   send(JSON.stringify({from:userStore.userState.username,msg:msg.value}) )
 }
 </script>
@@ -14,22 +19,39 @@ const sendmsg = ()=>{
   <div class="chatContent" ref="chatBox">
     <ul>
       <li v-for="(item, index) in messages" :key="index" :class="[item.from == userStore.userState.username ? 'right' : 'left']">
-        <span>{{ item.msg }}</span>
+          <div class="username">{{item.from}}</div>
+          <div class="usermsg" :class="[item.from == userStore.userState.username ? 'right' : 'left']"><span>{{ item.msg }}</span></div> 
+        
       </li>
     </ul>
   </div>
   <div class="sendBox">
-      <el-input v-model="msg" placeholder="Please input" class="input-with-select" type="textarea">
-        <template #append>
-          <el-button @click="sendmsg" type="primary">发送</el-button>
-        </template>
-      </el-input>
+      <el-input v-model="msg" placeholder="请输入内容" class="input-with-select" type="textarea" :autosize="{ minRows: 7, maxRows: 7 }"></el-input>
+      <el-button @click="sendmsg" style="height: 157px;" type="primary">发送</el-button>
   </div>
 </template>
 
 <style scoped>
+
+.username{
+  color: #b1b1b1
+}
+.sendBox {
+  display: flex;
+  align-items: stretch;
+  margin-bottom: 20px;
+}
+
+.el-input {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.el-button {
+  flex-shrink: 0;
+}
 .chatContent {
-  height: 735px;
+  height: calc(100vh - 230px);
   overflow-x: hidden;
 }
 
