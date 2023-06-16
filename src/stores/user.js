@@ -18,6 +18,10 @@ export const useUserStore = defineStore('user', () => {
         userToken.value = res.token
         userState.value = await getUserDataAPI()
     }
+    // 进入主页获取用户数据
+    const getUserInfo = async()=>{
+        userState.value = await getUserDataAPI()
+    }
     // 清空用户数据
     const clearUserState = ()=>{
         userState.value = {}
@@ -34,7 +38,8 @@ export const useUserStore = defineStore('user', () => {
         clearUserState,
         getRegisterUserState,
         userToken,
-        changeAvatar
+        changeAvatar,
+        getUserInfo
     }
 }, {
     persist: true,

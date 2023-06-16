@@ -1,95 +1,78 @@
 <script setup>
-import { ref,watch } from 'vue';
-import useWebSocket from './composable/useChat.js';
-
-const newMessage = ref('');
-const { message, error, send, close } = useWebSocket('ws://chat.server.url/');
-
-const sendMessage = () => {
-  if (newMessage.value) {
-    send({
-      user: 'currentUser',  // 发送用户名
-      text: newMessage.value,
-    });
-    newMessage.value = '';
-  }
-};
-
-watch(message, (msg) => {
-  // 直接更新模板显示新消息
-  addMessageToTemplate(msg); 
-});
-
-watch(error, (value) => {
-  if (value) {
-    close();
-  }
-});
+import useWebSocket from './composable/useWebSocket';
+import {useUserStore} from "@/stores/user"
+import { ref } from 'vue';
+const userStore = useUserStore()
+const { messages, isConnected, send } = useWebSocket('ws://192.168.1.151:8686/socket/'+userStore.userState.username);
+const msg = ref('')
+const sendmsg = ()=>{
+  send(JSON.stringify({from:userStore.userState.username,msg:msg.value}) )
+}
 </script>
 
 <template>
-  <!-- 显示所有用户的消息,带有用户名 -->
-  <div v-for="message in messages">
-    <div :class="message.user === 'currentUser' ? 'my-message' : 'other-message'">
-      {{ message.user }}: {{ message.text }}
-    </div>
+  <div class="chatContent" ref="chatBox">
+    <ul>
+      <li v-for="(item, index) in messages" :key="index" :class="[item.from == userStore.userState.username ? 'right' : 'left']">
+        <span>{{ item.msg }}</span>
+      </li>
+    </ul>
   </div>
-  <input type="text" v-model="newMessage" @keyup.enter="sendMessage" />
-  <button @click="sendMessage">Send</button>
+  <div class="sendBox">
+      <el-input v-model="msg" placeholder="Please input" class="input-with-select" type="textarea">
+        <template #append>
+          <el-button @click="sendmsg" type="primary">发送</el-button>
+        </template>
+      </el-input>
+  </div>
 </template>
 
-
 <style scoped>
-.chat-container {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  max-width: 600px;
-  margin: 0 auto;
+.chatContent {
+  height: 735px;
+  overflow-x: hidden;
 }
 
-.messages {
-  flex: 1;
-  overflow-y: auto;
-  padding: 1rem;
+ul {
+  list-style: none;
+  padding: 20px;
+  margin: 0;
+  font-size: 14px;
+  line-height: 20px;
 }
 
-.my-message,
-.other-message {
-  display: block;
-  padding: 0.5rem 1rem;
-  margin: 0.5rem 0;
-  border-radius: 1rem;
-  max-width: 70%;
-  word-wrap: break-word;
+li.left {
+  margin-right: 20px;
 }
 
-.my-message {
-  background-color: #4caf50;
-  color: white;
+li.left span {
+  display: inline-block;
+  border-radius: 0 15px 15px;
+  background-color: rgba(66, 196, 240, 0.1);
+  padding: 10px 15px;
+}
+
+li.right {
+  margin-left: 20px;
   text-align: right;
-  margin-left: auto;
-  border-bottom-right-radius: 0;
 }
 
-.other-message {
-  background-color: #f1f1f1;
-  color: black;
-  text-align: left;
-  margin-right: auto;
-  border-bottom-left-radius: 0;
+li.right span {
+  display: inline-block;
+  border-radius: 15px 0 15px 15px;
+  background-color: rgba(73, 154, 41, 0.1);
+  padding: 10px 15px;
 }
 
-.input-container {
-  display: flex;
-  padding: 1rem;
+li+li {
+  margin-top: 20px;
 }
 
-input {
-  flex: 1;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 1rem;
-  outline: none;
+.ql-container.ql-snow {
+  border: 0;
+}
+
+.ql-editor {
+  padding: 0;
 }
 </style>
