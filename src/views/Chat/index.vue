@@ -2,9 +2,19 @@
 import useWebSocket from './composable/useWebSocket';
 import { ElMessage } from 'element-plus';
 import {useUserStore} from "@/stores/user"
-import { ref } from 'vue';
+import { ref,onMounted, nextTick } from 'vue';
 const userStore = useUserStore()
-const { messages, isConnected, send } = useWebSocket('ws://192.168.1.151:8686/socket/'+userStore.userState.username);
+
+// 调整滚动条到最下面
+const chatBox = ref(null);
+const scrollToBottom = async() => {
+  nextTick(()=>{
+    chatBox.value.scrollTop = chatBox.value.scrollHeight;
+  })
+};
+
+
+const { messages, isConnected, send } = useWebSocket('ws://192.168.1.151:8686/socket/'+userStore.userState.username,scrollToBottom);
 const msg = ref('')
 const sendmsg = ()=>{
   if (msg.value.trim() === '') {
@@ -12,7 +22,11 @@ const sendmsg = ()=>{
     return;
   }
   send(JSON.stringify({from:userStore.userState.username,msg:msg.value}) )
+  msg.value = ''
 }
+
+
+
 </script>
 
 <template>

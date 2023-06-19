@@ -1,6 +1,6 @@
 import { ref, onMounted, onUnmounted } from 'vue';
 
-export default function useWebSocket(url) {
+export default function useWebSocket(url,onMessageReceived) {
   const ws = ref(null);
   const messages = ref([]);
   const isConnected = ref(false);
@@ -21,7 +21,7 @@ export default function useWebSocket(url) {
       else{
           messages.value.push(JSON.parse(event.data));
       }
-      console.log(messages.value);
+      onMessageReceived();
     };
 
     ws.value.onerror = (error) => {
