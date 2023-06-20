@@ -1,27 +1,27 @@
 <script setup>
 import useWebSocket from './composable/useWebSocket';
 import { ElMessage } from 'element-plus';
-import {useUserStore} from "@/stores/user"
-import { ref,onMounted, nextTick } from 'vue';
+import { useUserStore } from "@/stores/user"
+import { ref, onMounted, nextTick } from 'vue';
 const userStore = useUserStore()
 
 // 调整滚动条到最下面
 const chatBox = ref(null);
-const scrollToBottom = async() => {
-  nextTick(()=>{
+const scrollToBottom = async () => {
+  nextTick(() => {
     chatBox.value.scrollTop = chatBox.value.scrollHeight;
   })
 };
 
-
-const { messages, isConnected, send } = useWebSocket('ws://192.168.1.151:8686/socket/'+userStore.userState.username,scrollToBottom);
+const { messages, isConnected, send } = useWebSocket('ws://192.168.1.151:8686/socket/' + userStore.userState.username, scrollToBottom);
+// 发送信息
 const msg = ref('')
-const sendmsg = ()=>{
+const sendmsg = () => {
   if (msg.value.trim() === '') {
     ElMessage.error('输入内容不能为空');
     return;
   }
-  send(JSON.stringify({from:userStore.userState.username,msg:msg.value}) )
+  send(JSON.stringify({ from: userStore.userState.username, msg: msg.value }))
   msg.value = ''
 }
 
@@ -32,24 +32,27 @@ const sendmsg = ()=>{
 <template>
   <div class="chatContent" ref="chatBox">
     <ul>
-      <li v-for="(item, index) in messages" :key="index" :class="[item.from == userStore.userState.username ? 'right' : 'left']">
-          <div class="username">{{item.from}}</div>
-          <div class="usermsg" :class="[item.from == userStore.userState.username ? 'right' : 'left']"><span>{{ item.msg }}</span></div> 
-        
+      <li v-for="(item, index) in messages" :key="index"
+        :class="[item.from == userStore.userState.username ? 'right' : 'left']">
+          <div class="avatar"><el-avatar :size="size" :src="`http://192.168.1.151:8686/image/${item.avatar}`" /></div>
+          <div class="username">{{ item.from }}</div>
+          <div class="usermsg" :class="[item.from == userStore.userState.username ? 'right' : 'left']"><span
+              class="spanMsg">{{ item.msg }}</span></div>
       </li>
     </ul>
   </div>
   <div class="sendBox">
-      <el-input v-model="msg" placeholder="请输入内容" class="input-with-select" type="textarea" :autosize="{ minRows: 7, maxRows: 7 }"></el-input>
-      <el-button @click="sendmsg" style="height: 157px;" type="primary">发送</el-button>
+    <el-input v-model="msg" placeholder="请输入内容" class="input-with-select" type="textarea"
+      :autosize="{ minRows: 7, maxRows: 7 }"></el-input>
+    <el-button @click="sendmsg" style="height: 157px;" type="primary">发送</el-button>
   </div>
 </template>
 
 <style scoped>
-
-.username{
+.username {
   color: #b1b1b1
 }
+
 .sendBox {
   display: flex;
   align-items: stretch;
@@ -64,6 +67,7 @@ const sendmsg = ()=>{
 .el-button {
   flex-shrink: 0;
 }
+
 .chatContent {
   height: calc(100vh - 230px);
   overflow-x: hidden;
@@ -81,7 +85,21 @@ li.left {
   margin-right: 20px;
 }
 
-li.left span {
+.avatar{
+  position: relative;
+  top: 52px;
+}
+
+li.left .username{
+  position: relative;
+  left: 50px;
+}
+li.left .usermsg{
+  position: relative;
+  left: 50px;
+}
+
+li.left .spanMsg {
   display: inline-block;
   border-radius: 0 15px 15px;
   background-color: rgba(66, 196, 240, 0.1);
@@ -93,7 +111,16 @@ li.right {
   text-align: right;
 }
 
-li.right span {
+li.right .username{
+  position: relative;
+  right:  50px;
+}
+li.right .usermsg{
+  position: relative;
+  right:  50px;
+}
+
+li.right .spanMsg {
   display: inline-block;
   border-radius: 15px 0 15px 15px;
   background-color: rgba(73, 154, 41, 0.1);
@@ -110,5 +137,4 @@ li+li {
 
 .ql-editor {
   padding: 0;
-}
-</style>
+}</style>

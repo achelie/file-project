@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, ref, watch,nextTick } from 'vue'
 import { useFileStore } from '@/stores/file';
 import FileItem from './FileItem.vue';
 import LayoutHeader from "./LayoutHeader.vue";
@@ -31,14 +31,15 @@ watch(
     { deep: true } // 开启深度监听
 );
 // 监控当前页数
-const currentPage = ref(1)
+const currentPage = ref(fileStore.page)
 watch(currentPage, async () => {
-    if (!fileStore.isChangePage) {
+    if(currentPage!==fileStore.page){
         fileStore.changePage(currentPage.value)
         await fileStore.getFilesState()
-        infiniteList.value.scrollTop=0
+        nextTick(()=>{
+            infiniteList.value.scrollTop=0
+        })
     }
-    fileStore.falseIs()
 })
 
 watch(() => fileStore.page, async () => {
