@@ -4,7 +4,7 @@ import 'element-plus/theme-chalk/el-message.css'
 import {useUserStore} from "@/stores/user"
 // 创建axios实例
 const httpInstance = axios.create({
-  baseURL: 'http://192.168.1.151:8686',
+  baseURL: 'http://172.22.16.190:8686',
   timeout: 5000
 })
 

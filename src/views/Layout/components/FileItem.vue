@@ -92,7 +92,7 @@ const handleFileIcon = ()=>{
                     @click="handleCounter" ref="descInputRef"></el-input></div>
             <div class="fileuser"><el-text class="w-150px" truncated>上传者:{{ file.upname }}</el-text></div>
             <el-row>
-                <a :href="`http://192.168.1.151:8686/download?fileName=${file.filename}`"><el-button :icon="Download"
+                <a :href="`http://172.22.16.190:8686/download?fileName=${file.filename}`"><el-button :icon="Download"
                         circle></el-button></a>
                 <el-button v-if="!isCollect" @click="changeCollect" :icon="Star" circle />
                 <el-button v-if="isCollect" @click="changeCollect" :icon="StarFilled" circle />

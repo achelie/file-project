@@ -13,7 +13,7 @@ const scrollToBottom = async () => {
   })
 };
 
-const { messages, isConnected, send } = useWebSocket('ws://192.168.1.151:8686/socket/' + userStore.userState.username, scrollToBottom);
+const { messages, isConnected, send } = useWebSocket('ws://172.22.16.190:8686/socket/' + userStore.userState.username, scrollToBottom);
 // 发送信息
 const msg = ref('')
 const sendmsg = () => {
@@ -34,7 +34,7 @@ const sendmsg = () => {
     <ul>
       <li v-for="(item, index) in messages" :key="index"
         :class="[item.from == userStore.userState.username ? 'right' : 'left']">
-          <div class="avatar"><el-avatar :size="size" :src="`http://192.168.1.151:8686/image/${item.avatar}`" /></div>
+          <div class="avatar"><el-avatar :size="size" :src="`http://172.22.16.190:8686/image/${item.avatar}`" /></div>
           <div class="username">{{ item.from }}</div>
           <div class="usermsg" :class="[item.from == userStore.userState.username ? 'right' : 'left']"><span
               class="spanMsg">{{ item.msg }}</span></div>
@@ -43,7 +43,7 @@ const sendmsg = () => {
   </div>
   <div class="sendBox">
     <el-input v-model="msg" placeholder="请输入内容" class="input-with-select" type="textarea"
-      :autosize="{ minRows: 7, maxRows: 7 }"></el-input>
+      :autosize="{ minRows: 7, maxRows: 7 }" @keyup.enter="sendmsg"></el-input>
     <el-button @click="sendmsg" style="height: 157px;" type="primary">发送</el-button>
   </div>
 </template>

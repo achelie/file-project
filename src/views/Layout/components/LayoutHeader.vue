@@ -49,7 +49,7 @@ const handleSearch = async() => {
         <el-dialog v-model="dialogVisible" title="上传" width="30%" :before-close="closeDialog">
             <el-text>文件描述</el-text>
             <el-input v-model="describle"></el-input>
-            <el-upload class="upload-demo" ref="uploadRef" drag action="http://192.168.1.151:8686/upload" :data="uploadData" :headers="{Authorization:userStore.userToken}"
+            <el-upload class="upload-demo" ref="uploadRef" drag action="http://172.22.16.190:8686/upload" :data="uploadData" :headers="{Authorization:userStore.userToken}"
                 multiple :auto-upload="false" @success="ElMessage.success('上传成功')" @error="ElMessage.error('上传失败')" :directory="true">
                 <el-icon class="el-icon--upload"><upload-filled /></el-icon>
                 <div class="el-upload__text">

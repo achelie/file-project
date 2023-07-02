@@ -18,7 +18,7 @@ const confirm = () => {
           <li><el-col :span="12">
               <div class="demo-basic--circle">
                 <div class="block">
-                  <el-avatar :size="size" :src="`http://192.168.1.151:8686/image/${userStore.userState.avatar}`" />
+                  <el-avatar :size="size" :src="`http://172.22.16.190:8686/image/${userStore.userState.avatar}`" />
                 </div>
               </div>
             </el-col>

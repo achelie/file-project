@@ -31,7 +31,7 @@ const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
 
 
 <template>
-    <el-upload class="avatar-uploader" action="http://192.168.1.151:8686/uploadavatar" :headers="{Authorization:userStore.userToken}"
+    <el-upload class="avatar-uploader" action="http://172.22.16.190:8686/uploadavatar" :headers="{Authorization:userStore.userToken}"
         :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
         <img v-if="imageUrl" :src="imageUrl" class="avatar" />
         <el-icon v-else class="avatar-uploader-icon">
